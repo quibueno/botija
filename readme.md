@@ -1,57 +1,58 @@
-# Programa de Envio de Dados para InfluxDB na Nuvem
+# Data Sending Program for InfluxDB in the Cloud
 
-Este programa foi desenvolvido para um dispositivo ESP32 com a finalidade de enviar dados de medição de uma célula de carga para um servidor InfluxDB na nuvem.
+This is a data sending program designed to run on an ESP32 microcontroller. It reads data from a load cell using the HX711 library and sends the measurements to an InfluxDB database in the cloud. The program also includes a web server that allows configuration of the Wi-Fi credentials and the tare value.
 
-O programa realiza as seguintes funcionalidades:
+## Features
 
-- Conexão à rede Wi-Fi: O dispositivo se conecta a uma rede Wi-Fi usando as informações de SSID e senha fornecidas.
-- Medição de peso: Utilizando uma célula de carga e o módulo HX711, o programa realiza a medição do peso em uma unidade configurada (quilogramas, neste caso).
-- Configuração: É possível configurar o SSID e senha da rede Wi-Fi, assim como a tara (valor de calibração) por meio de uma interface web.
-- Envio de dados: Os dados de medição são enviados periodicamente para um servidor InfluxDB na nuvem usando a API HTTP.
+- Reads weight measurements from a load cell using HX711 library
+- Sends the measurements to an InfluxDB database in the cloud
+- Provides a web server for configuring Wi-Fi credentials and tare value
+- Supports deep sleep mode during specific hours
 
-## Requisitos
+## Requirements
 
-- Plataforma: ESP32
-- Bibliotecas: WiFi, WebServer, HTTPClient, HX711
-- Ambiente de Desenvolvimento: Arduino IDE
+- ESP32 microcontroller board
+- Load cell with HX711 amplifier
+- Wi-Fi connection
+- InfluxDB database server
 
-## Configuração
+## Dependencies
 
-Antes de utilizar o programa, é necessário realizar algumas configurações:
+- WiFi library
+- WebServer library
+- HTTPClient library
+- HX711 library
+- esp_sleep library
+- NTPClient library
+- WiFiUdp library
 
-1. Defina as informações de conexão para o servidor InfluxDB na nuvem:
-   - `INFLUXDB_URL`: URL do servidor InfluxDB na nuvem.
-   - `INFLUXDB_TOKEN`: Token de autenticação para acessar o servidor InfluxDB.
-   - `INFLUXDB_ORG`: ID da organização no servidor InfluxDB.
-   - `INFLUXDB_BUCKET`: Nome do bucket no servidor InfluxDB onde os dados serão armazenados.
+## Installation and Setup
 
-2. Defina as informações de conexão para a rede Wi-Fi:
-   - `ssid`: Nome da rede Wi-Fi.
-   - `password`: Senha da rede Wi-Fi.
+1. Connect the load cell to the ESP32 board following the wiring instructions for the HX711 library.
+2. Install the required libraries mentioned above using the Arduino Library Manager.
+3. Modify the program code to provide the necessary configuration details:
+   - Set your Wi-Fi credentials (`ssid` and `password`) in the code.
+   - Set the InfluxDB server address (`influxDB_server`) and token (`influxDB_token`).
+   - Customize other settings as needed.
+4. Compile and upload the program to your ESP32 board.
+5. Open the Serial Monitor to view the program output and check for any errors.
+6. Access the ESP32 web server at the assigned IP address to configure Wi-Fi and tare value.
+7. The ESP32 will start sending weight measurements to the InfluxDB server at the specified interval.
 
-3. Defina as informações específicas da célula de carga e calibração:
-   - `CELULA_DT`: Pino DT (Data) do módulo HX711 conectado à célula de carga.
-   - `CELULA_SCK`: Pino SCK (Clock) do módulo HX711 conectado à célula de carga.
-   - `fator_calib`: Fator de calibração para converter o valor lido pelo HX711 em uma unidade de peso (quilogramas, neste caso).
-   - `tara`: Valor de tara para ajustar a medição de peso.
+## Deep Sleep Mode
 
-## Uso
+The program includes a feature to enter deep sleep mode during specific hours (from 21:00 to 09:00). This helps conserve power when the load cell measurements are not needed. During this period, the ESP32 will go into deep sleep and wake up again at 09:00. To enable this feature, make sure to set the correct time zone in the NTPClient configuration (`timeClient`). Additionally, ensure that the ESP32 has a reliable time source to synchronize with (e.g., through an internet connection).
 
-1. Faça o upload do programa para o dispositivo ESP32 usando a Arduino IDE.
+## License
 
-2. Abra o Monitor Serial na Arduino IDE para visualizar as informações de debug e medição de peso.
+This program is licensed under the GPL v3. You can find the license details in the program source code.
 
-3. O dispositivo se conectará à rede Wi-Fi configurada e realizará medições de peso periodicamente.
+## Author
 
-4. Os dados de medição serão enviados para o servidor InfluxDB na nuvem e armazenados no bucket especificado.
+- Name: Luiz Quirino
+- Email: lugumar@gmail.com
 
-5. O LED embutido no dispositivo piscará a cada envio de dados.
 
-## Contribuição
 
-Este projeto é aberto a contribuições. Sinta-se à vontade para enviar pull requests para adicionar recursos, fazer melhorias ou corrigir problemas.
 
-## Autor
-
-Este programa foi desenvolvido por Luiz Quirino
 
